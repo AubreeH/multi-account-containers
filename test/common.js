@@ -90,6 +90,7 @@ const initializeWithTab = async (details = {
             "syncEnabled": true,
             "replaceTabEnabled": false,
             "mozillaVpnInstalled": false,
+            "promptForConfirmationEnabled": true,
           });
           window.browser.storage.local.set.resetHistory();
           window.browser.storage.sync.clear();

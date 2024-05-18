@@ -56,6 +56,11 @@ window.assignManager = {
       return !!replaceTabEnabled;
     },
 
+    async getPromptForConfirmationEnabled() {
+      const { promptForConfirmationEnabled } = await browser.storage.local.get("promptForConfirmationEnabled");
+      return !!promptForConfirmationEnabled;
+    },
+
     getByUrlKey(siteStoreKey) {
       return new Promise((resolve, reject) => {
         this.area.get([siteStoreKey]).then((storageResponse) => {
@@ -215,6 +220,10 @@ window.assignManager = {
   // route through a different container
   async onBeforeRequest(options) {
     if (options.frameId !== 0 || options.tabId === -1) {
+      return {};
+    }
+    const promptForConfirmationEnabled = await this.storageArea.getPromptForConfirmationEnabled();
+    if (!promptForConfirmationEnabled) {
       return {};
     }
     this.removeContextMenu();

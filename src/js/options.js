@@ -53,6 +53,11 @@ async function enableDisableReplaceTab() {
   await browser.storage.local.set({replaceTabEnabled: !!checkbox.checked});
 }
 
+async function enableDisablePromptForConfirmation() {
+  const checkbox = document.querySelector("#promptForConfirmationCheck");
+  await browser.storage.local.set({promptForConfirmationEnabled: !!checkbox.checked});
+}
+
 async function changeTheme(event) {
   const theme = event.currentTarget;
   await browser.storage.local.set({currentTheme: theme.value});
@@ -62,10 +67,12 @@ async function changeTheme(event) {
 async function setupOptions() {
   const { syncEnabled } = await browser.storage.local.get("syncEnabled");
   const { replaceTabEnabled } = await browser.storage.local.get("replaceTabEnabled");
+  const { promptForConfirmationEnabled } = await browser.storage.local.get("promptForConfirmationEnabled");
   const { currentThemeId } = await browser.storage.local.get("currentThemeId");
 
   document.querySelector("#syncCheck").checked = !!syncEnabled;
   document.querySelector("#replaceTabCheck").checked = !!replaceTabEnabled;
+  document.querySelector("#promptForConfirmationCheck").checked = !!promptForConfirmationEnabled;
   document.querySelector("#changeTheme").selectedIndex = currentThemeId;
   setupContainerShortcutSelects();
 }
@@ -123,6 +130,7 @@ browser.permissions.onRemoved.addListener(resetPermissionsUi);
 document.addEventListener("DOMContentLoaded", setupOptions);
 document.querySelector("#syncCheck").addEventListener( "change", enableDisableSync);
 document.querySelector("#replaceTabCheck").addEventListener( "change", enableDisableReplaceTab);
+document.querySelector("#promptForConfirmationCheck").addEventListener( "change", enableDisablePromptForConfirmation);
 document.querySelector("#changeTheme").addEventListener( "change", changeTheme);
 
 maybeShowPermissionsWarningIcon();
